@@ -9,11 +9,11 @@ jobs:
       - run:
           name: "Install Server Dependencies"
           command: |
-            npm install --prefix employee-payments-portal/server
+            npm install --prefix server
       - run:
           name: "Build Server"
           command: |
-            npm run build --prefix employee-payments-portal/server
+            npm run build --prefix server
 
   build-client:
     docker:
@@ -23,11 +23,11 @@ jobs:
       - run:
           name: "Install Client Dependencies"
           command: |
-            npm install --prefix employee-payments-portal/client
+            npm install --prefix client
       - run:
           name: "Build Client"
           command: |
-            npm run build --prefix employee-payments-portal/client
+            npm run build --prefix client
 
   test-server:
     docker:
@@ -37,11 +37,11 @@ jobs:
       - run:
           name: "Install Server Dependencies"
           command: |
-            npm install --prefix employee-payments-portal/server
+            npm install --prefix server
       - run:
           name: "Run Server Tests"
           command: |
-            npm test --prefix employee-payments-portal/server
+            npm test --prefix server
 
   test-client:
     docker:
@@ -51,11 +51,11 @@ jobs:
       - run:
           name: "Install Client Dependencies"
           command: |
-            npm install --prefix employee-payments-portal/client
+            npm install --prefix client
       - run:
           name: "Run Client Tests"
           command: |
-            npm test --prefix employee-payments-portal/client
+            npm test --prefix client
 
   sonarqube_scan:
     docker:
@@ -65,7 +65,7 @@ jobs:
       - run:
           name: "Run SonarQube Scan for Server"
           command: |
-            cd employee-payments-portal/server && sonar-scanner \
+            cd server && sonar-scanner \
               -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
               -Dsonar.organization="$SONAR_ORG" \
               -Dsonar.host.url="$SONAR_HOST_URL" \
@@ -79,7 +79,7 @@ jobs:
       - run:
           name: "Run SonarQube Scan for Client"
           command: |
-            cd employee-payments-portal/client && sonar-scanner \
+            cd client && sonar-scanner \
               -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
               -Dsonar.organization="$SONAR_ORG" \
               -Dsonar.host.url="$SONAR_HOST_URL" \
