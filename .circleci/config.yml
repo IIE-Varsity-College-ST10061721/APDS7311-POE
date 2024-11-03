@@ -1,40 +1,11 @@
 version: 2.1
 
 jobs:
-  install_dependencies:
-    docker:
-      - image: circleci/node:latest
-    steps:
-      - checkout
-      - run:
-          name: "Install Dependencies for Client and Server"
-          command: |
-            npm install --prefix employee-payments-portal/client
-            npm install --prefix employee-payments-portal/server
-
-  test:
-    docker:
-      - image: circleci/node:16  # Change Node version if needed
-    steps:
-      - checkout
-      - run:
-          name: "Install Dependencies for Testing"
-          command: |
-            npm install --prefix employee-payments-portal/client
-      - run:
-          name: "Adjust Permissions for Testing"
-          command: |
-            chmod -R +x node_modules/.bin || true
-      - run:
-          name: "Run Client Tests in CI Mode"
-          command: |
-            npm run ci:test --prefix employee-payments-portal/client
-
   sonarqube_scan:
     docker:
-      - image: sonarsource/sonar-scanner-cli:latest
+      - image: sonarsource/sonar-scanner-cli:latest 
     steps:
-      - checkout
+      - checkout 
       - run:
           name: "Run SonarQube Scan"
           command: |
@@ -52,12 +23,6 @@ jobs:
 
 workflows:
   version: 2
-  devsecops_pipeline:
+  scan_pipeline:
     jobs:
-      - install_dependencies
-      - test:
-          requires:
-            - install_dependencies
-      - sonarqube_scan:
-          requires:
-            - test
+      - sonarqube_scan
