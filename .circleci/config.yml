@@ -37,6 +37,10 @@ jobs:
           command: |
             npm install --prefix employee-payments-portal/client
       - run:
+          name: "Set Permissions for Client Test Script"
+          command: |
+            chmod +x employee-payments-portal/client/node_modules/.bin/react-scripts
+      - run:
           name: "Run Backend Tests"
           command: |
             npm test --prefix employee-payments-portal/server
