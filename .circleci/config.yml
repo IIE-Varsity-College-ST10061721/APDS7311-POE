@@ -1,19 +1,23 @@
 version: 2.1
 
 jobs:
-  build-server:
+  install-dependencies-client:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - run:
+          name: "Install Client Dependencies"
+          command: npm install --prefix employee-payments-portal/client
+
+  install-dependencies-server:
     docker:
       - image: circleci/node:latest
     steps:
       - checkout
       - run:
           name: "Install Server Dependencies"
-          command: |
-            npm install --prefix server
-      - run:
-          name: "Build Server"
-          command: |
-            npm run build --prefix server
+          command: npm install --prefix employee-payments-portal/server
 
   build-client:
     docker:
@@ -21,27 +25,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Install Client Dependencies"
-          command: |
-            npm install --prefix client
-      - run:
           name: "Build Client"
-          command: |
-            npm run build --prefix client
-
-  test-server:
-    docker:
-      - image: circleci/node:latest
-    steps:
-      - checkout
-      - run:
-          name: "Install Server Dependencies"
-          command: |
-            npm install --prefix server
-      - run:
-          name: "Run Server Tests"
-          command: |
-            npm test --prefix server
+          command: npm run build --prefix employee-payments-portal/client
 
   test-client:
     docker:
@@ -49,15 +34,19 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Install Client Dependencies"
-          command: |
-            npm install --prefix client
-      - run:
           name: "Run Client Tests"
-          command: |
-            npm test --prefix client
+          command: npm test --prefix employee-payments-portal/client
 
-  sonarqube_scan:
+  test-server:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - run:
+          name: "Run Server Tests"
+          command: npm test --prefix employee-payments-portal/server
+
+  sonar-scan:
     docker:
       - image: sonarsource/sonar-scanner-cli:latest
     steps:
@@ -65,49 +54,41 @@ jobs:
       - run:
           name: "Run SonarQube Scan for Server"
           command: |
-            cd server && sonar-scanner \
-              -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
-              -Dsonar.organization="$SONAR_ORG" \
-              -Dsonar.host.url="$SONAR_HOST_URL" \
-              -Dsonar.login="$SONAR_TOKEN" \
-              -Dsonar.sources="." \
-              -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-              -Dsonar.exclusions="**/*.c,**/*.cpp,**/*.h,**/tests/**" \
-              -Dsonar.c.file.suffixes=- \
-              -Dsonar.cpp.file.suffixes=- \
-              -Dsonar.objc.file.suffixes=-
+            sonar-scanner \
+              -Dsonar.projectKey=${SONAR_PROJECT_KEY}-server \
+              -Dsonar.organization=${SONAR_ORG} \
+              -Dsonar.sources=employee-payments-portal/server \
+              -Dsonar.host.url=${SONAR_HOST_URL} \
+              -Dsonar.login=${SONAR_TOKEN}
       - run:
           name: "Run SonarQube Scan for Client"
           command: |
-            cd client && sonar-scanner \
-              -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
-              -Dsonar.organization="$SONAR_ORG" \
-              -Dsonar.host.url="$SONAR_HOST_URL" \
-              -Dsonar.login="$SONAR_TOKEN" \
-              -Dsonar.sources="." \
-              -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-              -Dsonar.exclusions="**/*.c,**/*.cpp,**/*.h,**/tests/**" \
-              -Dsonar.c.file.suffixes=- \
-              -Dsonar.cpp.file.suffixes=- \
-              -Dsonar.objc.file.suffixes=-
+            sonar-scanner \
+              -Dsonar.projectKey=${SONAR_PROJECT_KEY}-client \
+              -Dsonar.organization=${SONAR_ORG} \
+              -Dsonar.sources=employee-payments-portal/client/src \
+              -Dsonar.host.url=${SONAR_HOST_URL} \
+              -Dsonar.login=${SONAR_TOKEN}
 
 workflows:
   version: 2
-  devsecops_pipeline:
+  build_and_test:
     jobs:
-      - build-server
-      - build-client
-      - test-server:
+      - install-dependencies-client
+      - install-dependencies-server
+      - build-client:
           requires:
-            - build-server
+            - install-dependencies-client
       - test-client:
           requires:
-            - build-client
-      - sonarqube_scan:
+            - install-dependencies-client
+      - test-server:
           requires:
-            - test-server
+            - install-dependencies-server
+      - sonar-scan:
+          requires:
             - test-client
+            - test-server
           filters:
             branches:
-              only:
-                - main
+              only: main
