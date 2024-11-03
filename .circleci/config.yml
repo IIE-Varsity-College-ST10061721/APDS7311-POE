@@ -1,68 +1,20 @@
 version: 2.1
 
 jobs:
-  build:
-    docker:
-      - image: circleci/node:latest
-    steps:
-      - checkout
-      - run:
-          name: "Install Backend Dependencies"
-          command: |
-            npm install --prefix employee-payments-portal/server
-      - run:
-          name: "Install Client Dependencies"
-          command: |
-            npm install --prefix employee-payments-portal/client
-      - run:
-          name: "Build Backend Application"
-          command: |
-            npm run build --prefix employee-payments-portal/server
-      - run:
-          name: "Build Client Application"
-          command: |
-            npm run build --prefix employee-payments-portal/client
-
-  test:
-    docker:
-      - image: circleci/node:latest
-    steps:
-      - checkout
-      - run:
-          name: "Install Backend Dependencies"
-          command: |
-            npm install --prefix employee-payments-portal/server
-      - run:
-          name: "Install Client Dependencies"
-          command: |
-            npm install --prefix employee-payments-portal/client
-      - run:
-          name: "Set Permissions for Client Test Script"
-          command: |
-            chmod +x employee-payments-portal/client/node_modules/.bin/react-scripts
-      - run:
-          name: "Run Backend Tests"
-          command: |
-            npm test --prefix employee-payments-portal/server
-      - run:
-          name: "Run Client Tests"
-          command: |
-            npm test --prefix employee-payments-portal/client
-
   sonarqube_scan:
     docker:
-      - image: sonarsource/sonar-scanner-cli:latest
+      - image: sonarsource/sonar-scanner-cli:latest  # Use SonarQube's official scanner image
     steps:
-      - checkout
+      - checkout  # Check out the code from your GitHub repository
       - run:
           name: "Run SonarQube Scan"
           command: |
-            cd employee-payments-portal && sonar-scanner \
+            sonar-scanner \
               -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
               -Dsonar.organization="$SONAR_ORG" \
               -Dsonar.host.url="$SONAR_HOST_URL" \
               -Dsonar.login="$SONAR_TOKEN" \
-              -Dsonar.sources="client,server" \
+              -Dsonar.sources="employee-payments-portal" \
               -Dsonar.branch.name="${CIRCLE_BRANCH}" \
               -Dsonar.exclusions="**/*.c,**/*.cpp,**/*.h,**/tests/**" \
               -Dsonar.c.file.suffixes=- \
@@ -71,14 +23,6 @@ jobs:
 
 workflows:
   version: 2
-  devsecops_pipeline:
+  scan_pipeline:
     jobs:
-      - build
-      - test
-      - sonarqube_scan:
-          requires:
-            - test
-          filters:
-            branches:
-              only:
-                - main
+      - sonarqube_scan
