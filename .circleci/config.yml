@@ -12,9 +12,9 @@ jobs:
             npm install --prefix employee-payments-portal/client
             npm install --prefix employee-payments-portal/server
 
-   test:
+  test:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:16  # Change Node version if needed
     steps:
       - checkout
       - run:
@@ -26,9 +26,9 @@ jobs:
           command: |
             chmod -R +x node_modules/.bin || true
       - run:
-          name: "Run Client Tests"
+          name: "Run Client Tests in CI Mode"
           command: |
-            npm test --prefix employee-payments-portal/client
+            npm run ci:test --prefix employee-payments-portal/client
 
   sonarqube_scan:
     docker:
