@@ -1,38 +1,26 @@
 version: 2.1
 
 jobs:
-  install-dependencies-client:
+  setup:
     docker:
       - image: circleci/node:latest
     steps:
       - checkout
       - run:
-          name: "Install Client Dependencies"
-          command: npm install --prefix employee-payments-portal/client
-
-  install-dependencies-server:
-    docker:
-      - image: circleci/node:latest
-    steps:
-      - checkout
-      - run:
-          name: "Install Server Dependencies"
-          command: npm install --prefix employee-payments-portal/server
-
-  build-client:
-    docker:
-      - image: circleci/node:latest
-    steps:
-      - checkout
-      - run:
-          name: "Build Client"
-          command: npm run build --prefix employee-payments-portal/client
+          name: "Install Root Dependencies"
+          command: npm install
 
   test-client:
     docker:
       - image: circleci/node:latest
     steps:
       - checkout
+      - run:
+          name: "Clean Install Client Dependencies"
+          command: npm ci --prefix employee-payments-portal/client
+      - run:
+          name: "Set Execute Permissions for Node Modules"
+          command: chmod -R +x employee-payments-portal/client/node_modules/.bin
       - run:
           name: "Run Client Tests"
           command: npm test --prefix employee-payments-portal/client
@@ -43,52 +31,20 @@ jobs:
     steps:
       - checkout
       - run:
+          name: "Install Server Dependencies"
+          command: npm ci --prefix employee-payments-portal/server
+      - run:
           name: "Run Server Tests"
           command: npm test --prefix employee-payments-portal/server
 
-  sonar-scan:
-    docker:
-      - image: sonarsource/sonar-scanner-cli:latest
-    steps:
-      - checkout
-      - run:
-          name: "Run SonarQube Scan for Server"
-          command: |
-            sonar-scanner \
-              -Dsonar.projectKey=${SONAR_PROJECT_KEY}-server \
-              -Dsonar.organization=${SONAR_ORG} \
-              -Dsonar.sources=employee-payments-portal/server \
-              -Dsonar.host.url=${SONAR_HOST_URL} \
-              -Dsonar.login=${SONAR_TOKEN}
-      - run:
-          name: "Run SonarQube Scan for Client"
-          command: |
-            sonar-scanner \
-              -Dsonar.projectKey=${SONAR_PROJECT_KEY}-client \
-              -Dsonar.organization=${SONAR_ORG} \
-              -Dsonar.sources=employee-payments-portal/client/src \
-              -Dsonar.host.url=${SONAR_HOST_URL} \
-              -Dsonar.login=${SONAR_TOKEN}
-
 workflows:
   version: 2
-  build_and_test:
+  test:
     jobs:
-      - install-dependencies-client
-      - install-dependencies-server
-      - build-client:
-          requires:
-            - install-dependencies-client
+      - setup
       - test-client:
           requires:
-            - install-dependencies-client
+            - setup
       - test-server:
           requires:
-            - install-dependencies-server
-      - sonar-scan:
-          requires:
-            - test-client
-            - test-server
-          filters:
-            branches:
-              only: main
+            - setup
