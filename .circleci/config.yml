@@ -1,50 +1,80 @@
 version: 2.1
 
 jobs:
-  setup:
+  build:
     docker:
       - image: circleci/node:latest
     steps:
       - checkout
       - run:
-          name: "Install Root Dependencies"
-          command: npm install
+          name: "Install Backend Dependencies"
+          command: |
+            npm install --prefix employee-payments-portal/server
+      - run:
+          name: "Install Client Dependencies"
+          command: |
+            npm install --prefix employee-payments-portal/client
+      - run:
+          name: "Build Backend Application"
+          command: |
+            npm run build --prefix employee-payments-portal/server
+      - run:
+          name: "Build Client Application"
+          command: |
+            npm run build --prefix employee-payments-portal/client
 
-  test-client:
+  test:
     docker:
       - image: circleci/node:latest
     steps:
       - checkout
       - run:
-          name: "Clean Install Client Dependencies"
-          command: npm ci --prefix employee-payments-portal/client
+          name: "Install Backend Dependencies"
+          command: |
+            npm install --prefix employee-payments-portal/server
       - run:
-          name: "Set Execute Permissions for Node Modules"
-          command: chmod -R +x employee-payments-portal/client/node_modules/.bin
+          name: "Install Client Dependencies"
+          command: |
+            npm install --prefix employee-payments-portal/client
+      - run:
+          name: "Run Backend Tests"
+          command: |
+            npm test --prefix employee-payments-portal/server
       - run:
           name: "Run Client Tests"
-          command: npm test --prefix employee-payments-portal/client
+          command: |
+            npm test --prefix employee-payments-portal/client
 
-  test-server:
+  sonarqube_scan:
     docker:
-      - image: circleci/node:latest
+      - image: sonarsource/sonar-scanner-cli:latest
     steps:
       - checkout
       - run:
-          name: "Install Server Dependencies"
-          command: npm ci --prefix employee-payments-portal/server
-      - run:
-          name: "Run Server Tests"
-          command: npm test --prefix employee-payments-portal/server
+          name: "Run SonarQube Scan"
+          command: |
+            cd employee-payments-portal && sonar-scanner \
+              -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
+              -Dsonar.organization="$SONAR_ORG" \
+              -Dsonar.host.url="$SONAR_HOST_URL" \
+              -Dsonar.login="$SONAR_TOKEN" \
+              -Dsonar.sources="client,server" \
+              -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+              -Dsonar.exclusions="**/*.c,**/*.cpp,**/*.h,**/tests/**" \
+              -Dsonar.c.file.suffixes=- \
+              -Dsonar.cpp.file.suffixes=- \
+              -Dsonar.objc.file.suffixes=-
 
 workflows:
   version: 2
-  test:
+  devsecops_pipeline:
     jobs:
-      - setup
-      - test-client:
+      - build
+      - test
+      - sonarqube_scan:
           requires:
-            - setup
-      - test-server:
-          requires:
-            - setup
+            - test
+          filters:
+            branches:
+              only:
+                - main
