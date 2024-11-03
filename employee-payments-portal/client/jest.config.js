@@ -1,10 +1,10 @@
-// client/jest.config.js
 module.exports = {
-    transform: {
-      "^.+\\.[t|j]sx?$": "babel-jest",
-    },
+    preset: "react-app",
     transformIgnorePatterns: [
-      "node_modules/(?!(axios)/)", // Add other problematic dependencies if needed
+      "node_modules/(?!axios)"  // Add other modules if needed
     ],
+    transform: {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    }
   };
   
