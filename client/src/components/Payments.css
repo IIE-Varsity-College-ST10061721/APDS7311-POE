@@ -1,0 +1,145 @@
+/* Overall body styling */
+body {
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    min-height: 100vh; /* Full height of the viewport */
+    margin: 0;
+    background-color: #f4f7fa; /* Light blue-gray background for a softer look */
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Modern font styling */
+    padding: 20px; /* Increased padding around the body for more breathing space */
+}
+
+/* Main layout for payments */
+.payments-layout {
+    display: flex;
+    flex-direction: row; /* Align form and payment history side by side */
+    gap: 40px; /* Space between the two containers */
+    width: 100%; /* Full width */
+    max-width: 1200px; /* Max width to limit expansion */
+    margin: 0 auto; /* Center layout */
+    background-color: #ffffff; /* White background for layout */
+    border-radius: 12px; /* Rounded corners for the layout */
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1); /* Deep shadow for depth */
+    overflow: hidden; /* Clip excess content */
+}
+
+/* Left side form container */
+.payment-form-container {
+    background-color: #ffffff; /* White background */
+    border-radius: 8px; /* Rounded corners */
+    padding: 30px; /* Increased padding inside the form container */
+    width: 35%; /* Fixed width for the form container */
+    display: flex; /* Enable flex for centering */
+    flex-direction: column; /* Column layout for form elements */
+    justify-content: flex-start; /* Align content to the top */
+    height: 70vh; /* Fixed height for the viewport for form container */
+    position: relative; /* For positioning child elements */
+    border: 1px solid #e0e0e0; /* Subtle border for form container */
+}
+
+/* Style for form elements */
+.payment-form-container input,
+.payment-form-container button,
+.payment-form-container select {
+    padding: 14px; /* Padding for inputs and buttons */
+    margin-bottom: 15px; /* Space between elements */
+    border: 1px solid #d1d1d1; /* Light border */
+    border-radius: 6px; /* Rounded corners for inputs */
+    font-size: 16px; /* Font size for readability */
+    transition: border-color 0.3s, box-shadow 0.3s; /* Smooth border color change */
+}
+
+.payment-form-container input:focus,
+.payment-form-container select:focus {
+    border-color: #007bff; /* Change border color on focus */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Subtle glow effect */
+    outline: none; /* Remove default outline */
+}
+
+/* Button styling */
+.payment-form-container button {
+    background-color: #007bff; /* Primary button color */
+    color: white; /* White text for buttons */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-weight: bold; /* Bold text for buttons */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth background color change */
+    padding: 14px; /* Increased padding for buttons */
+}
+
+.payment-form-container button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    transform: translateY(-3px); /* Lift effect on hover */
+}
+
+/* Right side payment history */
+.payment-history-container {
+    background-color: #ffffff; /* White background */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding inside the payment history */
+    width: 65%; /* Fixed width for the payment history */
+    height: 70vh; /* Fixed height for the history container */
+    overflow-y: auto; /* Allow vertical scrolling if content exceeds height */
+    border: 1px solid #e0e0e0; /* Subtle border for history container */
+}
+
+/* Style for the payment history heading */
+.payment-history-heading {
+    font-size: 26px; /* Larger font size for the heading */
+    margin-bottom: 20px; /* Space below the heading */
+    color: #333; /* Darker text color for contrast */
+    text-align: left; /* Align text to the left */
+    border-bottom: 3px solid #007bff; /* Bottom border for emphasis */
+    padding-bottom: 10px; /* Padding below the heading */
+    font-weight: bold; /* Bold heading */
+}
+
+/* Payment history grid */
+.payment-history {
+    display: grid; /* Grid layout for payment history items */
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Responsive grid */
+    gap: 20px; /* Space between cards */
+    list-style-type: none; /* No bullet points */
+    padding: 0; /* No padding */
+}
+
+/* Individual payment history item */
+.payment-item {
+    background-color: #f8f9fa; /* Light background for items */
+    border: 1px solid #e9ecef; /* Border around items */
+    border-radius: 8px; /* Rounded corners */
+    padding: 15px; /* Padding inside items */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    line-height: 1.6; /* Line height for readability */
+    transition: transform 0.3s, box-shadow 0.3s; /* Animation on hover */
+}
+
+.payment-item:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+}
+
+/* Margin for paragraph elements in payment items */
+.payment-item p {
+    margin: 5px 0; /* Space between lines in each card */
+    color: #555; /* Dark gray text for readability */
+}
+
+/* Media query for responsive design */
+@media (max-width: 768px) {
+    .payments-layout {
+        flex-direction: column; /* Stack containers on small screens */
+        align-items: center; /* Center containers */
+    }
+
+    .payment-form-container, .payment-history-container {
+        width: 90%; /* Full width on small screens */
+        max-width: none; /* Remove max-width restriction */
+        height: auto; /* Let the height be determined by content */
+    }
+
+    .payment-history {
+        grid-template-columns: 1fr; /* Stack cards on small screens */
+    }
+}

@@ -1,0 +1,98 @@
+/* Login Form Styles */
+body {
+    font-family: 'Arial', sans-serif; /* Clean font for readability */
+    background: linear-gradient(to bottom right, #e0eafc, #cfdef3); /* Soft gradient background */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height for login */
+}
+
+/* Login container */
+.login-container {
+    background: #fff; /* White background for the form */
+    border-radius: 15px; /* More pronounced rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Deeper shadow for a floating effect */
+    padding: 40px; /* Increased padding for spaciousness */
+    width: 400px; /* Fixed width for better layout */
+    text-align: center; /* Center text alignment */
+}
+
+/* Title styling for login */
+.login-title {
+    margin-bottom: 30px; /* Space below the title */
+    font-size: 32px; /* Larger font size for the title */
+    color: #333; /* Darker text for contrast */
+    font-weight: 700; /* Bolder font weight */
+}
+
+/* Login form layout */
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Input field styling */
+.login-input {
+    padding: 15px; /* More padding for comfort */
+    margin: 15px 0; /* Spacing between input fields */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    font-size: 16px; /* Consistent font size */
+    transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition effects */
+}
+
+/* Focus effect for input fields */
+.login-input:focus {
+    border-color: #5b9bd5; /* Highlight border color on focus */
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 8px rgba(91, 155, 213, 0.4); /* Soft glow effect */
+}
+
+/* Button styling */
+.login-button {
+    padding: 15px; /* Increased padding for buttons */
+    background-color: #5b9bd5; /* Primary button color */
+    color: white; /* White text for buttons */
+    border: none; /* No border */
+    border-radius: 8px; /* Rounded corners */
+    font-size: 18px; /* Larger font size for buttons */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for background color */
+}
+
+/* Button hover effect */
+.login-button:hover {
+    background-color: #4a8bc3; /* Darker blue on hover */
+    transform: translateY(-3px); /* Slight lift effect on hover */
+}
+
+/* Message styling */
+.login-message {
+    margin-top: 15px; /* More space above the message */
+    color: #e74c3c; /* Red for error messages */
+    font-size: 14px; /* Consistent font size */
+    font-weight: 500; /* Medium weight for emphasis */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 400px) {
+    .login-container {
+        width: 90%; /* Full width on small screens */
+        padding: 20px; /* Adjust padding */
+    }
+
+    .login-title {
+        font-size: 28px; /* Smaller title on mobile */
+    }
+
+    .login-input {
+        font-size: 15px; /* Smaller font size for inputs */
+    }
+
+    .login-button {
+        font-size: 16px; /* Smaller font size for buttons */
+    }
+}
