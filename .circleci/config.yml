@@ -3,12 +3,12 @@ version: 2.1
 jobs:
   sonarqube_scan:
     docker:
-      - image: sonarsource/sonar-scanner-cli:latest  # Official SonarQube scanner image
+      - image: sonarsource/sonar-scanner-cli:latest  
     steps:
-      - checkout  # Check out code from your GitHub repository
+      - checkout  
       - run:
-          name: "Install Dependencies"  # Only necessary if you have dependencies for the scan
-          command: npm install --prefix employee-payments-portal/client  # Example path; adjust if needed
+          name: "Install Dependencies"  
+          command: npm install --prefix employee-payments-portal/client  
       - run:
           name: "Run SonarQube Scan"
           command: |
