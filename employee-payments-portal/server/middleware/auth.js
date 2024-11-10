@@ -24,14 +24,14 @@ const checkAuth = (req, res, next) => {
         console.log('Decoded token payload:', decoded);
 
         // Ensure the decoded token includes user information and set req.user
-        if (!decoded || !decoded.userId) {
-            console.error('Decoded token does not contain user information');
+        if (!decoded || !decoded.userId || !decoded.role) {
+            console.error('Decoded token does not contain user information or role');
             return res.status(401).json({ message: "Unauthorized: Invalid token payload" });
         }
 
-        // Attach the decoded user information to the req.user object
-        req.user = { userId: decoded.userId };
-        console.log(`User authenticated: ${req.user.userId}`); // Log the user ID
+        // Attach the decoded user information and role to the req.user object
+        req.user = { userId: decoded.userId, role: decoded.role };
+        console.log(`User authenticated: ${req.user.userId} with role: ${req.user.role}`); // Log the user ID and role
 
         // Proceed to the next middleware or route handler
         next();

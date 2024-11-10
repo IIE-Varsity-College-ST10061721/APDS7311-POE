@@ -1,0 +1,114 @@
+/* Container for the dashboard */
+.transaction-dashboard-container {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom right, #e0eafc, #cfdef3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    height: 100vh;
+    overflow-y: auto;
+    width: 100%; /* Increase the width to make the container bigger */
+}
+
+/* Title styling for transaction dashboard */
+.transaction-dashboard-container h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Message styling */
+.message {
+    font-size: 18px;
+    color: #e74c3c; /* Red for error messages */
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+/* Transaction list styling */
+.transaction-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+    justify-content: center; /* Center cards horizontally */
+}
+
+/* Individual transaction card styling */
+.transaction-card {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 0 1 calc(33.33% - 20px); /* Make cards 33.33% of the width for 3 per row */
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+/* Reduce gap between text in the card */
+.transaction-card p {
+    margin: 2px 0; /* Decrease margin between text elements */
+}
+
+/* Button group styling inside the card */
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center; /* Center the buttons horizontally */
+    align-items: center; /* Optionally, center vertically */
+}
+
+/* Button styles */
+.verify-button,
+.submit-button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    border: none;
+}
+
+.verify-button {
+    background-color: #5b9bd5;
+    color: white;
+}
+
+.verify-button:hover {
+    background-color: #4a8bc3;
+    transform: translateY(-3px);
+}
+
+.submit-button {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.submit-button:hover {
+    background-color: #45a049;
+    transform: translateY(-3px);
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    .transaction-dashboard-container {
+        padding: 20px;
+    }
+
+    .transaction-list {
+        width: 100%;
+    }
+
+    .transaction-card {
+        width: 100%; /* Ensure cards take full width on small screens */
+    }
+}

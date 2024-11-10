@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './Login.css'; // Make sure to import the CSS file
+import './Login.css';
 
-const Login = ({ setToken, navigateToPayments }) => {
+const Login = ({ setToken, navigateToRegister, navigate }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
@@ -16,23 +16,30 @@ const Login = ({ setToken, navigateToPayments }) => {
                 { headers: { 'Content-Type': 'application/json' } }
             );
     
-            console.log('Response data:', response.data); // Success response data
-            setToken(response.data.token); // Save the token in state
-            localStorage.setItem('token', response.data.token); // Store token in localStorage
-            navigateToPayments(); // Redirect on success
+            console.log('Login response:', response); // Log the response data
+            const user = response.data.user; // Assuming the user data is returned
+            console.log('User role:', user.role); // Log user role
+    
+            // Save the token and user data
+            setToken(response.data.token);
+            localStorage.setItem('token', response.data.token);
+    
+            if (user.role === 'employee') {
+                console.log('Redirecting to employee dashboard...');
+                navigate('/employeedashboard');  // Ensure this is the correct path
+            }else{
+                navigate('/paymentform');
+            }
         } catch (error) {
+            console.error('Login error:', error); // Log any errors
             if (error.response) {
-                console.error('Error Status:', error.response.status); 
-                console.error('Error Data:', error.response.data);
                 setMessage(error.response.data.message);
-            } else if (error.request) {
-                console.error('No response received:', error.request);
-                setMessage('No response from server. Please check your connection.');
             } else {
-                console.error('Error:', error.message);
+                setMessage('An error occurred');
             }
         }
     };
+    
 
     return (
         <div className="login-container">
@@ -57,6 +64,10 @@ const Login = ({ setToken, navigateToPayments }) => {
                 <button type="submit" className="login-button">Login</button>
                 {message && <p className="login-message">{message}</p>}
             </form>
+            <p>
+                Don't have an account?{' '}
+                <button onClick={navigateToRegister}>Register</button>
+            </p>
         </div>
     );
 };

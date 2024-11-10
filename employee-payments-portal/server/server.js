@@ -7,6 +7,7 @@ const connectDB = require('./config/db');
 const userController = require('./controllers/userController');
 const paymentRoutes = require('./routes/paymentRoutes');
 const userRoutes = require('./routes/userRoutes');
+const transactionRoutes = require('./routes/transactionRoutes'); // Import transaction routes
 const { setSecurityHeaders, hstsMiddleware, limiter } = require('./middleware/security');
 
 const app = express();
@@ -37,6 +38,12 @@ app.use(setSecurityHeaders);
 app.use(hstsMiddleware);
 app.use(limiter);
 
+app.use((req, res, next) => {
+    console.log("Received headers:", req.headers);
+    next();
+});
+
+
 // Logging middleware
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} request to ${req.url}`);
@@ -46,6 +53,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 // Login route (POST)
 app.post('/api/users/login', async (req, res) => {

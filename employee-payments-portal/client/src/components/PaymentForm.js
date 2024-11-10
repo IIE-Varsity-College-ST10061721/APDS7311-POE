@@ -17,7 +17,7 @@ const Payments = () => {
                     console.warn("Token is missing in localStorage");
                     return;
                 }
-        
+
                 const response = await axios.get('http://localhost:5000/api/payments', {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -47,7 +47,8 @@ const Payments = () => {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setSuccess('Payment created successfully!');
-            setPayments((prev) => [...prev, response.data]); // Update the payments state
+            // Directly update the payments state with the newly created payment
+            setPayments((prev) => [response.data.payment, ...prev]); // Add new payment at the top of the list
             setFormData({ amount: '', currency: '', swiftCode: '', recipientAccountNumber: '' }); // Reset form fields
         } catch (err) {
             console.error(err);
@@ -64,32 +65,62 @@ const Payments = () => {
             <div className="payments-layout">
                 <div className="payment-form-container">
                     <form onSubmit={handlePayment} className="payment-form">
-                        <input type="number" name="amount" value={formData.amount} onChange={handleInputChange} placeholder="Amount" required />
-                        <input type="text" name="currency" value={formData.currency} onChange={handleInputChange} placeholder="Currency (e.g., USD)" required />
-                        <input type="text" name="swiftCode" value={formData.swiftCode} onChange={handleInputChange} placeholder="SWIFT Code" required />
-                        <input type="text" name="recipientAccountNumber" value={formData.recipientAccountNumber} onChange={handleInputChange} placeholder="Recipient Account" required />
-                        <button type="submit" disabled={loading}>{loading ? 'Processing...' : 'Submit Payment'}</button>
+                        <input
+                            type="number"
+                            name="amount"
+                            value={formData.amount}
+                            onChange={handleInputChange}
+                            placeholder="Amount"
+                            required
+                        />
+                        <input
+                            type="text"
+                            name="currency"
+                            value={formData.currency}
+                            onChange={handleInputChange}
+                            placeholder="Currency (e.g., USD)"
+                            required
+                        />
+                        <input
+                            type="text"
+                            name="swiftCode"
+                            value={formData.swiftCode}
+                            onChange={handleInputChange}
+                            placeholder="SWIFT Code"
+                            required
+                        />
+                        <input
+                            type="text"
+                            name="recipientAccountNumber"
+                            value={formData.recipientAccountNumber}
+                            onChange={handleInputChange}
+                            placeholder="Recipient Account"
+                            required
+                        />
+                        <button type="submit" disabled={loading}>
+                            {loading ? 'Processing...' : 'Submit Payment'}
+                        </button>
                         {error && <p className="error-message">{error}</p>}
                         {success && <p className="success-message">{success}</p>}
                     </form>
                 </div>
                 <div className="payment-history-container">
-    <h2>Payment History</h2>
-    {payments.length > 0 ? (
-        <ul className="payment-history">
-            {payments.map((payment, index) => (
-                <li key={index} className="payment-item">
-                    <p>Amount: {payment.amount}</p>
-                    <p>Currency: {payment.currency}</p>
-                    <p>SWIFT Code: {payment.swiftCode}</p>
-                    <p>Recipient Account: {payment.recipientAccountNumber}</p>
-                </li>
-            ))}
-        </ul>
-    ) : (
-        <p>No payments found.</p>
-    )}
-</div>
+                    <h2>Payment History</h2>
+                    {payments.length > 0 ? (
+                        <ul className="payment-history">
+                            {payments.map((payment, index) => (
+                                <li key={index} className="payment-item">
+                                    <p>Amount: {payment.amount}</p>
+                                    <p>Currency: {payment.currency}</p>
+                                    <p>SWIFT Code: {payment.swiftCode}</p>
+                                    <p>Recipient Account: {payment.recipientAccountNumber}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>No payments found.</p>
+                    )}
+                </div>
             </div>
         </div>
     );

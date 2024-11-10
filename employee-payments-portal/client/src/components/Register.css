@@ -1,0 +1,83 @@
+/* Container styling */
+ .register-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+/* Title styling */
+ .register-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+/* Form styling */
+ .register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Input styling */
+ .register-input {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+ .register-input:focus {
+    border-color: #007bff;
+}
+
+/* Button styling */
+ .register-button {
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+ .register-button:hover {
+    background-color: #0056b3;
+}
+
+/* Message styling */
+ .register-message {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+/* Link to register or login */
+ .register-container p {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.register-container p button {
+    color: #007bff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+ .register-container p button:hover {
+    color: #0056b3;
+}
